@@ -1,0 +1,164 @@
+# 380
+
+You will learn how to ...
+                         1. SecureSpring Web Application
+                         2. Develop login pages
+                         3. Define users and roles with simple authentication
+                         4. Protect urls based on roles
+                         5. Use JSP tags to hide/show content based on role
+                         6. Store users, password and roles in DB (Plain text -> Encrypted)
+                         
+Spring Security Model ...
+                         1. Spring Security Defines a framework for security
+                         2. Implemented using servlet filters at the background
+                         3. Tow methods of securing a web app: Declarative and Programatic 
+                         
+                        #1 Declarative Security: Define Applications security constraints in configuration... a. All java config
+                                                                                                              b. Spring xml config
+                                               : Provides seperation of concerns between application code and security  
+                        
+                        #2 Programatic security: Spring security provides an API for custom application coding
+                                               : Provides greater customization for specific app requirements
+                        
+                         
+Spring Security with servlet filters...
+                                       1. Servlet filters are used to   Pre-process / Post-process web requests
+                                       2. Servlet filters can route web request based on security logics
+                                       3. Spring provides a bulk of security functionality with servlet filters
+                                       
+
+
+Web Browser -------------->>>>>>>>>>>> Spring Security Filters  --------------->>>>>>>>>>>>>>>>>>  Protected Web Resource
+                                  (My App Security Configuration)
+                                        |             |
+                                        |             |
+                                   (Users, Passwords Roles)
+                                   
+Security Concepts...
+                    1. Authentication: Check Uset Id and Password with credentials stored in App/DB
+                    2. Authorization: Check to see if the user has the authorized role
+                    
+                    
+Different Login Methods: 1. HTTP basic Authentication  -- Built-in dialog box(pop-up) from browser
+                         2. Default login form - Spring security provides a default login form
+                         3. Custome Login Form - Your own look and feel, HTML+CSS
+                         
+ 
+Authentication and Authorization: 1. In Memory (Will Cover)
+                                  2. JDBC    (Will Cover)
+                                  3. LDAP
+                                  3. Custome / Pluggable
+                                  5. Others ...
+    
+    
+    
+# 381
+                                                                                                                (/leaders)
+                                                                     ____________________________________ Leadership Retreat Page
+                                                                   /                                          (Role: Manager)
+                                                                  /
+  Our Example:                                                   /
+         Login Page----->>>>  / Home Page(Employee)  _ _ _ _ _ _ 
+         (Username, Password)                                    \
+                                                                  \                                             (/systems)
+                                                                   \____________________________________ Admin Holiday Cruise
+                                                                                                                (Role: Admin)
+                                                      
+                    
+ # 382
+ 
+ We will use only java configuration, no xml
+ 
+ Development Process: 1. Add Maven dependencies for Spring MVC web App
+                      2. Create Spring App Configuration (@Configuration)
+                      3. Create Spring dispatcher servlet initializer
+                      4. Develop our spring controller
+                      5. Develop our jsp view page
+                    
+ Step 1. Add Maven dependencies into pom.xml:             spring-webmvc, jstl, javax.servlet-api, javax.servlet.jsp-api
+ 
+ Customize Maven build: Since we are not using web.xml, so must add maven war plugin
+ 
+ xml config  _______________________________________          to          ___________________________________________________ java config
+ No web.xml or spring-mvc-demo-servlet.xml                                     Spring @Configuration, Spring dispatcher servlet initializer
+                                                                               @EnableWebMvc, It will accept @Controller, @RequestMapping
+                                                                               @ConponentScan(basePackage="")
+ 
+ Step 2.  Creating Spring App Configuration
+     @Configuration
+     @EnableWebMvc
+     @ConponentScan(basePackage="")
+     public class DemoAppConfig  {  }
+     
+     //define a bean for view resolver
+     
+     //This will help to map appropriate view page 
+     @Bean
+     Public ViewResolver viewResolver()
+     {
+     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+     viewResolver.setPrefix("/WEB-INF/view/");
+     viewResolver.setSuffix(".jsp");
+     return viewResolver;
+     
+     }
+     
+ # 383
+     
+     WebApp Initializer
+     # Spring MVC provies support for web app initialization
+     # Makes sure your code is automatically detected
+     # Your code is used to initialize the servlet container
+     And All this possible by class Called  : AbstractAnnotationConfigDispatcherServletInitializer
+                                            : we will extend this abstract class
+                                            : Ovveride required methods
+                                            : Specify servlet mapping and location of your app config
+
+
+ Step 3. Create Spring dispatcher servlet initializer
+ 
+ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+ public class MySpringMvcDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
+ {
+ //We will override the methods
+ 
+ @Override
+ protected Class<?>[] getRootConfigClass()
+ {
+ return null;
+ }
+ @Override
+ protected Class<?>[] getServletConfigClass()
+ {
+ return new Class[]{DemoAppConfig.class};
+ }
+ @Override
+ protected String[] getServletMapping()
+ {
+ return new String[] {"/"};
+ }
+ }
+                    
+                    
+Step 4. Develop our Spring Controller
+
+@Controller
+public class DemoController
+{
+@GetMapping("/")
+public String showHome()
+{
+return "home";
+}
+}
+                    
+Step 5. Develope our jsp page
+<html>
+<body>
+<h3>Welcome to our hame.jsp page </h3>
+</body>
+</html>
+                    
+                    
+                    
+                    

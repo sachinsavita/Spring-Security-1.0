@@ -160,5 +160,69 @@ Step 5. Develope our jsp page
 </html>
                     
                     
-                    
-                    
+Application is running fine!
+
+# 391-393
+
+       ## Add Spring Security maven dependencies!!!
+          
+          <!-- Spring Security  -->
+		<!-- Spring Security web, Spring Security config -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>6.0.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>6.0.1</version>
+		</dependency>
+          
+          
+# 394
+
+Configuring Basic Security
+
+#Development Process
+1. Create Spring Security Initializer.
+2. Create spring security configuratuon(@Configuration).
+3. Add users passwords and roles.
+
+1. Create Spring Security Initialize-   Extend Base Class - AbstractSecurityWebApplicationInitializer
+          
+  So class will be like:
+  
+  class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer {}
+  
+2. Create spring security configuratuon(@Configuration)
+
+  @Configuration
+  @EnableWebSecurity
+  public class DemoSecurityConfig extends WebSecurityConfigurerAdapter
+  {
+     @Override 
+     protected void configure(AuthenticationManagerBuilder auth) throws Exception
+     {
+     
+3. Add users passwords and roles.     
+     //add our users for in memory authentication
+     
+     UserBuilder users = User.withDefaultPasswordEncoder();
+     auth.inMemoryAuthentication()
+     .withUser(users.userName("john").password("test1").roles("EMPLOYEE"));
+     }
+  }
+
+     
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          

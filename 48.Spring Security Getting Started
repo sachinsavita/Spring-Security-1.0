@@ -1,1 +1,96 @@
-# 398
+# 400   Custome Login Form
+
+Development Process
+1. Modify spring security configuration to reference custom loogin form
+2. Develop a controller to show the custom login 
+3. Create custom login form
+
+1. Modify spring security configuration to reference custom loogin form
+
+@Configuration
+@EnableWebSecurity
+public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
+
+//override methods to configure users for in memory authentication
+
+@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		
+		http.authorizeRequests()
+		.anyRequest()
+		.authenticated()
+		.and()
+		.formLogin()
+		.loginPage("/showMyLoginPage")
+		.loginProcessingUrl("/authenticateTheUser")
+		.permitAll();
+	}
+...
+}
+
+Method                                                   Description
+Configure(AuthenticationManagerBuilder)             Configure users (in memory, database, Idap, etc)
+configure(HttpSecurity)                             Configure security of web paths in application, login logout etc
+
+
+
+2. Develop a controller to show the custom login 
+@Controller
+public class LoginController {
+	
+	
+	@GetMapping("showMyLogInPage")
+	public String showMyLogInPage()
+	{
+		return "pain-login";
+	}
+
+}
+
+
+3. Create custom login form
+
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<html>
+
+<head>
+	<title>Custom Login Page</title>
+</head>
+
+<body>
+	<h2>My Custom Login Page</h2>
+	<hr>
+    <form:form action="${pageContext.request.servletContext}/authenticateTheUser" method="POST">
+    
+    <p>
+    User name: <input type="text" name="username">
+    </p>
+    <p>
+    Password: <input type="password" name="password">
+    </p>
+    
+    <input type="submit" value="Login">
+    
+    </form:form>	
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
